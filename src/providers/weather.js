@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext } from "react";
+import React, { useState, useContext } from "react";
 import axios from "axios";
 
 export const WeatherContext = React.createContext([]);
@@ -6,9 +6,10 @@ export const WeatherContext = React.createContext([]);
 export const WeatherProvider = ({ children }) => {
   let key = "823942bbc48c4a7388732902210510";
 
-  const [weather, setWeather] = useState([]);
+  const [weather, setWeather] = useState(null);
   const [newCity, setNewCity] = useState([]);
   const [newDetails, setNewDetails] = useState([]);
+  const [dataWeatherDay, setDataWeatherDay] = useState(null);
 
   const search = async (value) =>
     await axios
@@ -21,9 +22,25 @@ export const WeatherProvider = ({ children }) => {
       })
       .catch((e) => alert(e));
 
+  const searchWeatherDay = async (value) =>
+    await axios
+      .get(
+        `http://api.weatherapi.com/v1/current.json?key=${key}&q=${value}&days=3&aqi=no&alerts=no`
+      )
+      .then((r) => setDataWeatherDay(r.data))
+      .catch((e) => alert(e));
+
   return (
     <WeatherContext.Provider
-      value={{ search, weather, newCity, newDetails, setNewDetails }}
+      value={{
+        search,
+        weather,
+        newCity,
+        newDetails,
+        setNewDetails,
+        searchWeatherDay,
+        dataWeatherDay,
+      }}
     >
       {children}
     </WeatherContext.Provider>

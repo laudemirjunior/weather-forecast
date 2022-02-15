@@ -2,41 +2,26 @@ import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Ionicons from "react-native-vector-icons/Ionicons";
 
-import Home from ".././screens/home";
-import Details from ".././screens/details";
-import User from ".././screens/user";
+import Home from "../screens/home";
+import Details from "../screens/details";
+import Search from "../screens/search";
+
+import CustomTabBar from "../components/CustomTabBar";
 
 const HomeStack = createNativeStackNavigator();
 
 function HomeStackScreen() {
   return (
     <HomeStack.Navigator
-      initialRouteName="StackHome"
+      initialRouteName="Home"
       screenOptions={{
         headerShown: false,
       }}
     >
-      <HomeStack.Screen name="StackHome" component={Home} />
-      <HomeStack.Screen name="StackDetails" component={Details} />
+      <HomeStack.Screen name="Home" component={Home} />
+      <HomeStack.Screen name="Details" component={Details} />
     </HomeStack.Navigator>
-  );
-}
-
-const SettingsStack = createNativeStackNavigator();
-
-function SettingsStackScreen() {
-  return (
-    <SettingsStack.Navigator
-      initialRouteName="SettingsHome"
-      screenOptions={{
-        headerShown: false,
-      }}
-    >
-      <SettingsStack.Screen name="SettingsHome" component={Home} />
-      <SettingsStack.Screen name="SettingsProfile" component={User} />
-    </SettingsStack.Navigator>
   );
 }
 
@@ -46,24 +31,13 @@ export default function Routes() {
   return (
     <NavigationContainer>
       <Tab.Navigator
-        screenOptions={({ route }) => ({
+        screenOptions={{
           headerShown: false,
-          tabBarIcon: ({ focused, color, size }) => {
-            let iconName;
-
-            if (route.name === "Home") {
-              iconName = "home";
-            } else if (route.name === "User") {
-              iconName = "person";
-            }
-            return <Ionicons name={iconName} size={size} color={color} />;
-          },
-          tabBarActiveTintColor: "tomato",
-          tabBarInactiveTintColor: "gray",
-        })}
+        }}
+        tabBar={(props) => <CustomTabBar {...props} />}
       >
-        <Tab.Screen name="Home" component={HomeStackScreen} />
-        <Tab.Screen name="User" component={SettingsStackScreen} />
+        <Tab.Screen name="HomeStackScreen" component={HomeStackScreen} />
+        <Tab.Screen name="Search" component={Search} />
       </Tab.Navigator>
     </NavigationContainer>
   );
